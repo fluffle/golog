@@ -4,7 +4,7 @@
 package logging
 
 import (
-	gomock "gomock.googlecode.com/hg/gomock"
+	gomock "github.com/dsymonds/gomock/gomock"
 )
 
 // Mock of Logger interface
@@ -24,70 +24,70 @@ func NewMockLogger(ctrl *gomock.Controller) *MockLogger {
 	return mock
 }
 
-func (m *MockLogger) EXPECT() *_MockLoggerRecorder {
-	return m.recorder
+func (_m *MockLogger) EXPECT() *_MockLoggerRecorder {
+	return _m.recorder
 }
 
-func (m *MockLogger) Log(_param0 LogLevel, _param1 string, _param2 ...interface{}) {
-	m.ctrl.Call(m, "Log", _param0, _param1, _param2)
+func (_m *MockLogger) Log(_param0 LogLevel, _param1 string, _param2 ...interface{}) {
+	_m.ctrl.Call(_m, "Log", _param0, _param1, _param2)
 }
 
-func (mr *_MockLoggerRecorder) Log(arg0, arg1 interface{}, arg2 ...interface{}) *gomock.Call {
-	return mr.mock.ctrl.RecordCall(mr.mock, "Log", arg0, arg1, arg2)
+func (_mr *_MockLoggerRecorder) Log(arg0, arg1 interface{}, arg2 ...interface{}) *gomock.Call {
+	return _mr.mock.ctrl.RecordCall(_mr.mock, "Log", arg0, arg1, arg2)
 }
 
-func (m *MockLogger) Debug(_param0 string, _param1 ...interface{}) {
-	m.ctrl.Call(m, "Debug", _param0, _param1)
+func (_m *MockLogger) Debug(_param0 string, _param1 ...interface{}) {
+	_m.ctrl.Call(_m, "Debug", _param0, _param1)
 }
 
-func (mr *_MockLoggerRecorder) Debug(arg0 interface{}, arg1 ...interface{}) *gomock.Call {
-	return mr.mock.ctrl.RecordCall(mr.mock, "Debug", arg0, arg1)
+func (_mr *_MockLoggerRecorder) Debug(arg0 interface{}, arg1 ...interface{}) *gomock.Call {
+	return _mr.mock.ctrl.RecordCall(_mr.mock, "Debug", arg0, arg1)
 }
 
-func (m *MockLogger) Info(_param0 string, _param1 ...interface{}) {
-	m.ctrl.Call(m, "Info", _param0, _param1)
+func (_m *MockLogger) Info(_param0 string, _param1 ...interface{}) {
+	_m.ctrl.Call(_m, "Info", _param0, _param1)
 }
 
-func (mr *_MockLoggerRecorder) Info(arg0 interface{}, arg1 ...interface{}) *gomock.Call {
-	return mr.mock.ctrl.RecordCall(mr.mock, "Info", arg0, arg1)
+func (_mr *_MockLoggerRecorder) Info(arg0 interface{}, arg1 ...interface{}) *gomock.Call {
+	return _mr.mock.ctrl.RecordCall(_mr.mock, "Info", arg0, arg1)
 }
 
-func (m *MockLogger) Warn(_param0 string, _param1 ...interface{}) {
-	m.ctrl.Call(m, "Warn", _param0, _param1)
+func (_m *MockLogger) Warn(_param0 string, _param1 ...interface{}) {
+	_m.ctrl.Call(_m, "Warn", _param0, _param1)
 }
 
-func (mr *_MockLoggerRecorder) Warn(arg0 interface{}, arg1 ...interface{}) *gomock.Call {
-	return mr.mock.ctrl.RecordCall(mr.mock, "Warn", arg0, arg1)
+func (_mr *_MockLoggerRecorder) Warn(arg0 interface{}, arg1 ...interface{}) *gomock.Call {
+	return _mr.mock.ctrl.RecordCall(_mr.mock, "Warn", arg0, arg1)
 }
 
-func (m *MockLogger) Error(_param0 string, _param1 ...interface{}) {
-	m.ctrl.Call(m, "Error", _param0, _param1)
+func (_m *MockLogger) Error(_param0 string, _param1 ...interface{}) {
+	_m.ctrl.Call(_m, "Error", _param0, _param1)
 }
 
-func (mr *_MockLoggerRecorder) Error(arg0 interface{}, arg1 ...interface{}) *gomock.Call {
-	return mr.mock.ctrl.RecordCall(mr.mock, "Error", arg0, arg1)
+func (_mr *_MockLoggerRecorder) Error(arg0 interface{}, arg1 ...interface{}) *gomock.Call {
+	return _mr.mock.ctrl.RecordCall(_mr.mock, "Error", arg0, arg1)
 }
 
-func (m *MockLogger) Fatal(_param0 string, _param1 ...interface{}) {
-	m.ctrl.Call(m, "Fatal", _param0, _param1)
+func (_m *MockLogger) Fatal(_param0 string, _param1 ...interface{}) {
+	_m.ctrl.Call(_m, "Fatal", _param0, _param1)
 }
 
-func (mr *_MockLoggerRecorder) Fatal(arg0 interface{}, arg1 ...interface{}) *gomock.Call {
-	return mr.mock.ctrl.RecordCall(mr.mock, "Fatal", arg0, arg1)
+func (_mr *_MockLoggerRecorder) Fatal(arg0 interface{}, arg1 ...interface{}) *gomock.Call {
+	return _mr.mock.ctrl.RecordCall(_mr.mock, "Fatal", arg0, arg1)
 }
 
-func (m *MockLogger) SetLogLevel(_param0 LogLevel) {
-	m.ctrl.Call(m, "SetLogLevel", _param0)
+func (_m *MockLogger) SetLogLevel(_param0 LogLevel) {
+	_m.ctrl.Call(_m, "SetLogLevel", _param0)
 }
 
-func (mr *_MockLoggerRecorder) SetLogLevel(arg0 interface{}) *gomock.Call {
-	return mr.mock.ctrl.RecordCall(mr.mock, "SetLogLevel", arg0)
+func (_mr *_MockLoggerRecorder) SetLogLevel(arg0 interface{}) *gomock.Call {
+	return _mr.mock.ctrl.RecordCall(_mr.mock, "SetLogLevel", arg0)
 }
 
-func (m *MockLogger) SetOnly(_param0 bool) {
-	m.ctrl.Call(m, "SetOnly", _param0)
+func (_m *MockLogger) SetOnly(_param0 bool) {
+	_m.ctrl.Call(_m, "SetOnly", _param0)
 }
 
-func (mr *_MockLoggerRecorder) SetOnly(arg0 interface{}) *gomock.Call {
-	return mr.mock.ctrl.RecordCall(mr.mock, "SetOnly", arg0)
+func (_mr *_MockLoggerRecorder) SetOnly(arg0 interface{}) *gomock.Call {
+	return _mr.mock.ctrl.RecordCall(_mr.mock, "SetOnly", arg0)
 }
