@@ -4,7 +4,7 @@
 package logging
 
 import (
-	gomock "code.google.com/p/gomock/gomock"
+	gomock "github.com/dsymonds/gomock/gomock"
 )
 
 // Mock of Logger interface
@@ -29,51 +29,81 @@ func (_m *MockLogger) EXPECT() *_MockLoggerRecorder {
 }
 
 func (_m *MockLogger) Log(_param0 LogLevel, _param1 string, _param2 ...interface{}) {
-	_m.ctrl.Call(_m, "Log", _param0, _param1, _param2)
+	_s := []interface{}{_param0, _param1}
+	for _, _x := range _param2 {
+		_s = append(_s, _x)
+	}
+	_m.ctrl.Call(_m, "Log", _s...)
 }
 
 func (_mr *_MockLoggerRecorder) Log(arg0, arg1 interface{}, arg2 ...interface{}) *gomock.Call {
-	return _mr.mock.ctrl.RecordCall(_mr.mock, "Log", arg0, arg1, arg2)
+	_s := append([]interface{}{arg0, arg1}, arg2...)
+	return _mr.mock.ctrl.RecordCall(_mr.mock, "Log", _s...)
 }
 
 func (_m *MockLogger) Debug(_param0 string, _param1 ...interface{}) {
-	_m.ctrl.Call(_m, "Debug", _param0, _param1)
+	_s := []interface{}{_param0}
+	for _, _x := range _param1 {
+		_s = append(_s, _x)
+	}
+	_m.ctrl.Call(_m, "Debug", _s...)
 }
 
 func (_mr *_MockLoggerRecorder) Debug(arg0 interface{}, arg1 ...interface{}) *gomock.Call {
-	return _mr.mock.ctrl.RecordCall(_mr.mock, "Debug", arg0, arg1)
+	_s := append([]interface{}{arg0}, arg1...)
+	return _mr.mock.ctrl.RecordCall(_mr.mock, "Debug", _s...)
 }
 
 func (_m *MockLogger) Info(_param0 string, _param1 ...interface{}) {
-	_m.ctrl.Call(_m, "Info", _param0, _param1)
+	_s := []interface{}{_param0}
+	for _, _x := range _param1 {
+		_s = append(_s, _x)
+	}
+	_m.ctrl.Call(_m, "Info", _s...)
 }
 
 func (_mr *_MockLoggerRecorder) Info(arg0 interface{}, arg1 ...interface{}) *gomock.Call {
-	return _mr.mock.ctrl.RecordCall(_mr.mock, "Info", arg0, arg1)
+	_s := append([]interface{}{arg0}, arg1...)
+	return _mr.mock.ctrl.RecordCall(_mr.mock, "Info", _s...)
 }
 
 func (_m *MockLogger) Warn(_param0 string, _param1 ...interface{}) {
-	_m.ctrl.Call(_m, "Warn", _param0, _param1)
+	_s := []interface{}{_param0}
+	for _, _x := range _param1 {
+		_s = append(_s, _x)
+	}
+	_m.ctrl.Call(_m, "Warn", _s...)
 }
 
 func (_mr *_MockLoggerRecorder) Warn(arg0 interface{}, arg1 ...interface{}) *gomock.Call {
-	return _mr.mock.ctrl.RecordCall(_mr.mock, "Warn", arg0, arg1)
+	_s := append([]interface{}{arg0}, arg1...)
+	return _mr.mock.ctrl.RecordCall(_mr.mock, "Warn", _s...)
 }
 
 func (_m *MockLogger) Error(_param0 string, _param1 ...interface{}) {
-	_m.ctrl.Call(_m, "Error", _param0, _param1)
+	_s := []interface{}{_param0}
+	for _, _x := range _param1 {
+		_s = append(_s, _x)
+	}
+	_m.ctrl.Call(_m, "Error", _s...)
 }
 
 func (_mr *_MockLoggerRecorder) Error(arg0 interface{}, arg1 ...interface{}) *gomock.Call {
-	return _mr.mock.ctrl.RecordCall(_mr.mock, "Error", arg0, arg1)
+	_s := append([]interface{}{arg0}, arg1...)
+	return _mr.mock.ctrl.RecordCall(_mr.mock, "Error", _s...)
 }
 
 func (_m *MockLogger) Fatal(_param0 string, _param1 ...interface{}) {
-	_m.ctrl.Call(_m, "Fatal", _param0, _param1)
+	_s := []interface{}{_param0}
+	for _, _x := range _param1 {
+		_s = append(_s, _x)
+	}
+	_m.ctrl.Call(_m, "Fatal", _s...)
 }
 
 func (_mr *_MockLoggerRecorder) Fatal(arg0 interface{}, arg1 ...interface{}) *gomock.Call {
-	return _mr.mock.ctrl.RecordCall(_mr.mock, "Fatal", arg0, arg1)
+	_s := append([]interface{}{arg0}, arg1...)
+	return _mr.mock.ctrl.RecordCall(_mr.mock, "Fatal", _s...)
 }
 
 func (_m *MockLogger) SetLogLevel(_param0 LogLevel) {
