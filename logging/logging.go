@@ -228,35 +228,44 @@ func (l *logger) SetOnly(only bool) {
 }
 
 // Expose a default logger as configured by flags
-var DefaultLogger = newFromFlags()
+var defaultLogger *logger
+
+func InitFromFlags() Logger {
+	if defaultLogger != nil {
+		return defaultLogger
+	}
+	defaultLogger = newFromFlags()
+	return defaultLogger
+}
+
 func Log(lv LogLevel, fm string, v ...interface{}) {
-	DefaultLogger.write(lv, fm, v...)
+	defaultLogger.write(lv, fm, v...)
 }
 
 func Debug(fm string, v ...interface{}) {
-	DefaultLogger.write(LogDebug, fm, v...)
+	defaultLogger.write(LogDebug, fm, v...)
 }
 
 func Info(fm string, v ...interface{}) {
-	DefaultLogger.write(LogInfo, fm, v...)
+	defaultLogger.write(LogInfo, fm, v...)
 }
 
 func Warn(fm string, v ...interface{}) {
-	DefaultLogger.write(LogWarn, fm, v...)
+	defaultLogger.write(LogWarn, fm, v...)
 }
 
 func Error(fm string, v ...interface{}) {
-	DefaultLogger.write(LogError, fm, v...)
+	defaultLogger.write(LogError, fm, v...)
 }
 
 func Fatal(fm string, v ...interface{}) {
-	DefaultLogger.write(LogFatal, fm, v...)
+	defaultLogger.write(LogFatal, fm, v...)
 }
 
 func SetLogLevel(lv LogLevel) {
-	DefaultLogger.SetLogLevel(lv)
+	defaultLogger.SetLogLevel(lv)
 }
 
 func SetOnly(only bool) {
-	DefaultLogger.SetOnly(only)
+	defaultLogger.SetOnly(only)
 }
