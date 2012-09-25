@@ -49,11 +49,11 @@ func newMock(t *testing.T) (*logger, *writerMap) {
 	wMap := &writerMap{
 		t: t,
 		m: map[LogLevel]*mockWriter{
-			Debug: &mockWriter{make([]byte, 0)},
-			Info:  &mockWriter{make([]byte, 0)},
-			Warn:  &mockWriter{make([]byte, 0)},
-			Error: &mockWriter{make([]byte, 0)},
-			Fatal: &mockWriter{make([]byte, 0)},
+			LogDebug: &mockWriter{make([]byte, 0)},
+			LogInfo:  &mockWriter{make([]byte, 0)},
+			LogWarn:  &mockWriter{make([]byte, 0)},
+			LogError: &mockWriter{make([]byte, 0)},
+			LogFatal: &mockWriter{make([]byte, 0)},
 		},
 	}
 	logMap := make(LogMap)
@@ -104,7 +104,7 @@ func (wm *writerMap) ExpectNothing() {
 func (wm *writerMap) ExpectAt(lv LogLevel, exp string) {
 	var w *mockWriter
 	if _, ok := wm.m[lv]; !ok {
-		w = wm.m[Debug]
+		w = wm.m[LogDebug]
 	} else {
 		w = wm.m[lv]
 	}

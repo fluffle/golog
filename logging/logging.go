@@ -14,31 +14,23 @@ import (
 // Note that higher levels of logging are still usable via Log(). They will be
 // output to the debug log in split mode if --log.level is set high enough.
 
-// Also, remember to call flag.Parse() near the start of your func main()!
-
-// The enforced singleton style of the standard "log" pkg is very nice, but
-// it encourages people to write less testable code, and while logging is one
-// of the few places where a singleton is not necessarily bad practise, it's
-// not *that* hard to propagate your logging to where it needs to be.
-// Alternatively you can create your own damn singleton with this package ;-)
-
 type LogLevel int
 type LogMap map[LogLevel]*log.Logger
 
 const (
-	Fatal LogLevel = iota - 1
-	Error
-	Warn
-	Info
-	Debug
+	LogFatal LogLevel = iota - 1
+	LogError
+	LogWarn
+	LogInfo
+	LogDebug
 )
 
 var logString map[LogLevel]string = map[LogLevel]string{
-	Fatal: "FATAL",
-	Error: "ERROR",
-	Warn:  "WARN",
-	Info:  "INFO",
-	Debug: "DEBUG",
+	LogFatal: "FATAL",
+	LogError: "ERROR",
+	LogWarn:  "WARN",
+	LogInfo:  "INFO",
+	LogDebug: "DEBUG",
 }
 func LogString(lv LogLevel) string {
 	if s, ok := logString[lv]; ok {
@@ -50,7 +42,7 @@ func LogString(lv LogLevel) string {
 var (
 	file = flag.String("log.file", "",
 		"Log to this file rather than STDERR")
-	level = flag.Int("log.level", int(Error),
+	level = flag.Int("log.level", int(LogError),
 		"Level of logging to be output")
 	only = flag.Bool("log.only", false,
 		"Only log output at the selected level")
@@ -112,15 +104,16 @@ func makeLogger(w io.Writer) *log.Logger {
 }
 
 // Creates a new logger object using the flags declared above.
-// You MUST call flag.Parse before calling this ;-)
-// Calling this more than once is inadvisable, you may get log corruption.
-func NewFromFlags() *logger {
+func newFromFlags() *logger {
+	if !flag.Parsed() {
+		flag.Parse()
+	}
 	// Sanity checks: if log.split is set, must have a log.file.
 	if *split && *file == "" {
 		log.Fatalf("You must pass --log.file with --log.split")
 	}
 
-	lv := Error
+	lv := LogError
 	logMap := make(LogMap)
 
 	// What are we logging?
@@ -131,19 +124,19 @@ func NewFromFlags() *logger {
 	case *level != 0:
 		lv = LogLevel(*level)
 	case *quiet:
-		lv = Fatal
+		lv = LogFatal
 	case *warn:
-		lv = Warn
+		lv = LogWarn
 	case *info:
-		lv = Info
+		lv = LogInfo
 	case *debug:
-		lv = Debug
+		lv = LogDebug
 	}
 
 	// Where are we logging to?
 	if *split {
 		// Fill in the logger map.
-		for l := Fatal; l <= Debug; l++ {
+		for l := LogFatal; l <= LogDebug; l++ {
 			logMap[l] = openLog(*file + "." + logString[l])
 		}
 	} else {
@@ -153,7 +146,7 @@ func NewFromFlags() *logger {
 		} else {
 			_log = makeLogger(os.Stderr)
 		}
-		for l := Fatal; l <= Debug; l++ {
+		for l := LogFatal; l <= LogDebug; l++ {
 			logMap[l] = _log
 		}
 	}
@@ -165,7 +158,7 @@ func NewFromFlags() *logger {
 func New(m LogMap, lv LogLevel, only bool) *logger {
 	// Sanity check the log map we've been passed.
 	// We need loggers for all levels in case SetLogLevel is called.
-	for l := Fatal; l <= Debug; l++ {
+	for l := LogFatal; l <= LogDebug; l++ {
 		if _log, ok := m[l]; !ok || _log == nil {
 			log.Fatalf("Output log level %s has no logger configured.",
 				logString[l])
@@ -174,23 +167,23 @@ func New(m LogMap, lv LogLevel, only bool) *logger {
 	return &logger{m, lv, only, &sync.Mutex{}}
 }
 
-// Internal function all others call to ensure identical call depth
+// Writer function all others call to ensure identical call depth
 func (l *logger) write(lv LogLevel, fm string, v ...interface{}) {
 	if lv > l.level || (l.only && lv != l.level) {
 		// Your logs are not important to us, goodnight
 		return
 	}
 	fm = fmt.Sprintf(LogString(lv)+" "+fm, v...)
-	if lv > Debug || lv < Fatal {
+	if lv > LogDebug || lv < LogFatal {
 		// This is an unrecognised log level, so log it to Debug
-		lv = Debug
+		lv = LogDebug
 	}
 
 	l.Lock()
 	defer l.Unlock()
 	// Writing the log is deceptively simple
 	l.log[lv].Output(3, fm)
-	if lv == Fatal {
+	if lv == LogFatal {
 		// Always fatal to stderr too. Use panic so (a) we get a backtrace,
 		// and (b) it's trappable for testing (and maybe other times too).
 		log.Panic(fm)
@@ -203,23 +196,23 @@ func (l *logger) Log(lv LogLevel, fm string, v ...interface{}) {
 
 // Helper functions for specific levels
 func (l *logger) Debug(fm string, v ...interface{}) {
-	l.write(Debug, fm, v...)
+	l.write(LogDebug, fm, v...)
 }
 
 func (l *logger) Info(fm string, v ...interface{}) {
-	l.write(Info, fm, v...)
+	l.write(LogInfo, fm, v...)
 }
 
 func (l *logger) Warn(fm string, v ...interface{}) {
-	l.write(Warn, fm, v...)
+	l.write(LogWarn, fm, v...)
 }
 
 func (l *logger) Error(fm string, v ...interface{}) {
-	l.write(Error, fm, v...)
+	l.write(LogError, fm, v...)
 }
 
 func (l *logger) Fatal(fm string, v ...interface{}) {
-	l.write(Fatal, fm, v...)
+	l.write(LogFatal, fm, v...)
 }
 
 func (l *logger) SetLogLevel(lv LogLevel) {
@@ -232,4 +225,38 @@ func (l *logger) SetOnly(only bool) {
 	l.Lock()
 	defer l.Unlock()
 	l.only = only
+}
+
+// Expose a default logger as configured by flags
+var DefaultLogger = newFromFlags()
+func Log(lv LogLevel, fm string, v ...interface{}) {
+	DefaultLogger.write(lv, fm, v...)
+}
+
+func Debug(fm string, v ...interface{}) {
+	DefaultLogger.write(LogDebug, fm, v...)
+}
+
+func Info(fm string, v ...interface{}) {
+	DefaultLogger.write(LogInfo, fm, v...)
+}
+
+func Warn(fm string, v ...interface{}) {
+	DefaultLogger.write(LogWarn, fm, v...)
+}
+
+func Error(fm string, v ...interface{}) {
+	DefaultLogger.write(LogError, fm, v...)
+}
+
+func Fatal(fm string, v ...interface{}) {
+	DefaultLogger.write(LogFatal, fm, v...)
+}
+
+func SetLogLevel(lv LogLevel) {
+	DefaultLogger.SetLogLevel(lv)
+}
+
+func SetOnly(only bool) {
+	DefaultLogger.SetOnly(only)
 }
