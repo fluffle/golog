@@ -86,7 +86,7 @@ type logger struct {
 	log         LogMap
 	level       LogLevel
 	only        bool
-	*sync.Mutex // to ensure changing levels/flags is atomic
+	sync.Mutex  // to ensure changing levels/flags is atomic
 }
 
 // Helper function for opening log files, causes lots of Fatal :-)
@@ -164,7 +164,7 @@ func New(m LogMap, lv LogLevel, only bool) *logger {
 				logString[l])
 		}
 	}
-	return &logger{m, lv, only, &sync.Mutex{}}
+	return &logger{m, lv, only, sync.Mutex{}}
 }
 
 // Writer function all others call to ensure identical call depth
@@ -229,8 +229,11 @@ func (l *logger) SetOnly(only bool) {
 
 // Expose a default logger as configured by flags
 var defaultLogger *logger
+var loggerLock    sync.Mutex
 
 func InitFromFlags() Logger {
+	loggerLock.Lock()
+	defer loggerLock.Unlock()
 	if defaultLogger != nil {
 		return defaultLogger
 	}
