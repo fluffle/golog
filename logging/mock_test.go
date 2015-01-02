@@ -61,7 +61,7 @@ func newMock(t *testing.T) (*logger, *writerMap) {
 		logMap[lv] = makeLogger(w)
 	}
 	// Set the default log level high enough that everything will get logged
-	return New(logMap, (1<<31)-1, false, 3), wMap
+	return New(logMap, (1<<31)-1, false, 0), wMap
 }
 
 // When you expect something to be logged but don't care so much what level at.

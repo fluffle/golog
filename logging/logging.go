@@ -154,7 +154,7 @@ func newFromFlags() *logger {
 		}
 	}
 
-	return New(logMap, lv, *only, 3)
+	return New(logMap, lv, *only, 0)
 }
 
 // You'll have to set up your own loggers for this one...
@@ -185,7 +185,7 @@ func (l *logger) write(lv LogLevel, fm string, v ...interface{}) {
 	l.Lock()
 	defer l.Unlock()
 	// Writing the log is deceptively simple
-	l.log[lv].Output(l.depth, fm)
+	l.log[lv].Output(l.depth + 3, fm)
 	if lv == LogFatal {
 		// Always fatal to stderr too. Use panic so (a) we get a backtrace,
 		// and (b) it's trappable for testing (and maybe other times too).
