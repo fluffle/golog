@@ -77,6 +77,8 @@ type Logger interface {
 	SetLogLevel(LogLevel)
 	// Set the logger to only output the current level
 	SetOnly(bool)
+	// Set the stack depth for the logger
+	SetDepth(int)
 }
 
 // A struct to implement the above interface
@@ -86,6 +88,7 @@ type logger struct {
 	log         LogMap
 	level       LogLevel
 	only        bool
+	depth       int
 	sync.Mutex  // to ensure changing levels/flags is atomic
 }
 
@@ -151,11 +154,11 @@ func newFromFlags() *logger {
 		}
 	}
 
-	return New(logMap, lv, *only)
+	return New(logMap, lv, *only, 3)
 }
 
 // You'll have to set up your own loggers for this one...
-func New(m LogMap, lv LogLevel, only bool) *logger {
+func New(m LogMap, lv LogLevel, only bool, depth int) *logger {
 	// Sanity check the log map we've been passed.
 	// We need loggers for all levels in case SetLogLevel is called.
 	for l := LogFatal; l <= LogDebug; l++ {
@@ -164,7 +167,7 @@ func New(m LogMap, lv LogLevel, only bool) *logger {
 				logString[l])
 		}
 	}
-	return &logger{m, lv, only, sync.Mutex{}}
+	return &logger{m, lv, only, depth, sync.Mutex{}}
 }
 
 // Writer function all others call to ensure identical call depth
@@ -182,7 +185,7 @@ func (l *logger) write(lv LogLevel, fm string, v ...interface{}) {
 	l.Lock()
 	defer l.Unlock()
 	// Writing the log is deceptively simple
-	l.log[lv].Output(3, fm)
+	l.log[lv].Output(l.depth, fm)
 	if lv == LogFatal {
 		// Always fatal to stderr too. Use panic so (a) we get a backtrace,
 		// and (b) it's trappable for testing (and maybe other times too).
@@ -225,6 +228,12 @@ func (l *logger) SetOnly(only bool) {
 	l.Lock()
 	defer l.Unlock()
 	l.only = only
+}
+
+func (l *logger) SetDepth(depth int) {
+	l.Lock()
+	defer l.Unlock()
+	l.depth = depth
 }
 
 // Expose a default logger as configured by flags
@@ -271,4 +280,8 @@ func SetLogLevel(lv LogLevel) {
 
 func SetOnly(only bool) {
 	defaultLogger.SetOnly(only)
+}
+
+func SetDepth(depth int) {
+	defaultLogger.SetDepth(depth)
 }
