@@ -107,7 +107,7 @@ func makeLogger(w io.Writer) *log.Logger {
 }
 
 // Creates a new logger object using the flags declared above.
-func newFromFlags() *logger {
+func NewFromFlags() *logger {
 	if !flag.Parsed() {
 		flag.Parse()
 	}
@@ -246,7 +246,7 @@ func InitFromFlags() Logger {
 	if defaultLogger != nil {
 		return defaultLogger
 	}
-	defaultLogger = newFromFlags()
+	defaultLogger = NewFromFlags()
 	return defaultLogger
 }
 
