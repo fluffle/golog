@@ -1,0 +1,30 @@
+---
+language: go
+
+go:
+  - 1.5
+  - 1.5.3
+  - 1.6
+
+sudo : false
+
+notifications:
+  irc:
+    channels:
+      - "irc.pl0rt.org#sp0rklf"
+    skip_join: true
+
+before_install:
+# As the source is hardcoded to github.com/fluffle put in symlinks to allow others to build
+  - mkdir /home/travis/gopath/src/github.com/fluffle
+  - if [ "$TRAVIS_REPO_SLUG" != "fluffle/golog" ] ; then ln -s "$HOME/gopath/src/github.com/$TRAVIS_REPO_SLUG" /home/travis/gopath/src/github.com/fluffle/golog ; fi
+# Dependencies for code coverage
+  - go get github.com/axw/gocov/gocov
+  - go get github.com/mattn/goveralls
+  - if ! go get github.com/golang/tools/cmd/cover; then go get golang.org/x/tools/cmd/cover; fi
+
+script:
+# goveralls (code coverage) will invoke unit tests
+  - cd /home/travis/gopath/src/github.com/fluffle/golog/logging
+  - $HOME/gopath/bin/goveralls -service=travis-ci
+
