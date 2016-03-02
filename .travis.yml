@@ -16,8 +16,7 @@ notifications:
 
 before_install:
 # As the source is hardcoded to github.com/fluffle put in symlinks to allow others to build
-  - mkdir /home/travis/gopath/src/github.com/fluffle
-  - if [ "$TRAVIS_REPO_SLUG" != "fluffle/golog" ] ; then ln -s "$HOME/gopath/src/github.com/$TRAVIS_REPO_SLUG" /home/travis/gopath/src/github.com/fluffle/golog ; fi
+  - if [ "$TRAVIS_REPO_SLUG" != "fluffle/golog" ] ; then mkdir /home/travis/gopath/src/github.com/fluffle; ln -s "$HOME/gopath/src/github.com/$TRAVIS_REPO_SLUG" /home/travis/gopath/src/github.com/fluffle/golog ; fi
 # Dependencies for code coverage
   - go get github.com/axw/gocov/gocov
   - go get github.com/mattn/goveralls
