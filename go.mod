@@ -1,4 +1,4 @@
-module github.com/fluffle/golog/logging
+module github.com/fluffle/golog
 
 require (
 	github.com/golang/mock v1.1.1
